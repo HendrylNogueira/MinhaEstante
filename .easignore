@@ -1,0 +1,28 @@
+# Diretórios que não devem ir para o build
+node_modules/
+.expo/
+.vscode/
+dist/
+web-build/
+scripts/
+app-example/
+
+# Arquivos de configuração e cache
+*.tsbuildinfo
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+.DS_Store
+
+# Variáveis de ambiente
+.env*
+expo-env.d.ts
+
+# Arquivos de log ou debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
