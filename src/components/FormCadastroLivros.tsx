@@ -32,6 +32,7 @@ export default function FormCadastrousuario(){
                 [ean, titulo, autor, categoria, nota, foto, 0] // 0 = ainda não lido
             );
             console.log("Livro inserido!", result);
+            console.log([ean, titulo, autor, categoria, nota, foto, 0]);
             alert('Livro cadastrado com sucesso!');
             setEan('');
             setTitulo('');

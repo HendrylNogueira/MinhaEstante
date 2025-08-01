@@ -1,3 +1,4 @@
+import React from "react";
 import { Image, View, Text, TouchableOpacity, Linking, StyleSheet } from "react-native";
 
 export default function LinkGitHub(){
