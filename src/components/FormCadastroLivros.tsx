@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import dbLivros from '../context/database';
+import * as ImagePicker from 'expo-image-picker';
+
 import * as SQLite from 'expo-sqlite';
 import React from 'react';
 
@@ -32,7 +34,7 @@ export default function FormCadastrousuario(){
                 [ean, titulo, autor, categoria, nota, foto, 0] // 0 = ainda não lido
             );
             console.log("Livro inserido!", result);
-            console.log([ean, titulo, autor, categoria, nota, foto, 0]);
+            console.log([ean, titulo, autor, categoria, nota, foto, 0])
             alert('Livro cadastrado com sucesso!');
             setEan('');
             setTitulo('');
@@ -46,6 +48,33 @@ export default function FormCadastrousuario(){
         alert('Erro ao cadastrar livro.');
     }
 };
+
+
+const abrirCamera = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permissão negada', 'Você precisa permitir o uso da câmera.');
+            return;
+        }
+
+        const result = await ImagePicker.launchCameraAsync({ quality: 0.5, base64: false });
+        if (!result.canceled) {
+            setFoto(result.assets[0].uri);
+        }
+    };
+
+    const escolherDaGaleria = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permissão negada', 'Você precisa permitir acesso à galeria.');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.5, base64: false });
+        if (!result.canceled) {
+            setFoto(result.assets[0].uri);
+        }
+    };
 
 
     useEffect(() => {
@@ -120,6 +149,20 @@ export default function FormCadastrousuario(){
                 onChangeText={setFoto}
             />
 
+            <View style={style.botoesFotoContainer}>
+                <TouchableOpacity style={style.botaoSecundario} onPress={abrirCamera}>
+                    <Text style={style.textoBotao}>📸 Tirar Foto</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={style.botaoSecundario} onPress={escolherDaGaleria}>
+                    <Text style={style.textoBotao}>🖼️ Escolher da Galeria</Text>
+                </TouchableOpacity>
+            </View>
+
+            {foto !== '' && (
+                <Image source={{ uri: foto }} style={{ width: 100, height: 140, marginTop: 10 }} />
+            )}
+
             <TouchableOpacity onPress={handleCadastro} style={style.botao} >
                 <Text style={style.textoBotao}>CADASTRAR</Text>
             </TouchableOpacity>
@@ -152,5 +195,18 @@ const style = StyleSheet.create({
     textoBotao: {
         textAlign: 'center',
         fontSize: 14
-    }
+    },
+        botaoSecundario: {
+        backgroundColor: '#d4d4d4',
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 8,
+        marginTop: 10,
+        marginHorizontal: 5,
+    },
+    botoesFotoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '90%',
+    },
 })
